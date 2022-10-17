@@ -28,6 +28,7 @@ function addTodo() {
 	todos.push(todoObject);
 
 	document.dispatchEvent(new Event(RENDER_EVENT));
+	saveData();
 }
 
 // generateId() berfungsi untuk menghasilkan identitas unik pada setiap item todo.
@@ -138,6 +139,7 @@ function addTaskToCompleted(todoId) {
 
 	todoTarget.isCompleted = true;
 	document.dispatchEvent(new Event(RENDER_EVENT));
+	saveData();
 }
 
 function findTodo(todoId) {
@@ -156,6 +158,7 @@ function removeTaskFromCompleted(todoId) {
 
 	todos.splice(todoTarget, 1);
 	document.dispatchEvent(new Event(RENDER_EVENT));
+	saveData();
 }
 
 function undoTaskFromCompleted(todoId) {
@@ -165,6 +168,7 @@ function undoTaskFromCompleted(todoId) {
 
 	todoTarget.isCompleted = false;
 	document.dispatchEvent(new Event(RENDER_EVENT));
+	saveData();
 }
 
 function findTodoIndex(todoId) {
@@ -175,4 +179,12 @@ function findTodoIndex(todoId) {
 	}
 
 	return -1;
+}
+
+function saveData() {
+	if (isStorageExist()) {
+		const parsed = JSON.stringify(todos);
+		localStorage.setItem(STORAGE_KEY, parsed);
+		document.dispatchEvent(new Event(SAVED_EVENT));
+	}
 }
